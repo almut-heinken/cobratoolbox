@@ -24,8 +24,10 @@ function [createdModels] = createPersonalizedModel(abunFilePath, resPath, model,
 
 [ab] = readtable(abunFilePath);
 fcol=table2cell(ab(:,1));
-if  ~isa(fcol{2,1},'char')
-     fcol=cellstr(num2str(cell2mat(fcol))); 
+if size(fcol,1)>1
+    if  ~isa(fcol{2,1},'char')
+        fcol=cellstr(num2str(cell2mat(fcol)));
+    end
 end
 spaceColInd=strmatch(' ',fcol);
 if length(spaceColInd)>0
