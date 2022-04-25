@@ -110,6 +110,9 @@ if isempty(mapP)
     data=cell2mat(subsystemAbundance(2:end,2:end));
     xlabels=subsystemAbundance(1,2:end);
     ylabels=subsystemAbundance(2:end,1);
+    % remove low abundance subsystems
+    ylabels(find(sum(data,2)<0.01),:)=[];
+    data(find(sum(data,2)<0.01),:)=[];
     figure;
     imagesc(data)
     colormap('hot')
@@ -285,8 +288,6 @@ end
 for i=1:length(sampNames)
     modelNames{i}=['microbiota_model_samp_' sampNames{i}];
 end
-
-close all
 
 if ~isempty(infoFilePath)
     [modelStats,summary,statistics]=retrieveModelStats(resPath, modelNames, abunFilePath, numWorkers, infoFilePath);

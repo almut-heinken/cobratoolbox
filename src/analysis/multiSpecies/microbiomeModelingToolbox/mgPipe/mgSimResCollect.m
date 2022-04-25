@@ -39,6 +39,8 @@ end
 
 tol = 1e-07;
 
+database=loadVMHDatabase;
+
 % Extract results from fluxes matrix and analyze: NMPCs will be computed for
 % rich (if enabled) and standard diet. NMPCs are computed under the assumption
 % that the community maximizes its uptakes and secretions. NMPCs are computed
@@ -106,6 +108,7 @@ for j = init:fl
     ext=['Net secretion';sampNames];
     netSecretionFluxes=[ext';fSp'];
     writetable(cell2table(netSecretionFluxes),[resPath names{1, j} '_net_secretion_fluxes.csv'],'WriteVariableNames',false);
+    
     convRes=num2cell(uSp);
     uSp=[exchanges';convRes'];
     ext=['Net uptake';sampNames];
@@ -175,13 +178,13 @@ for j = init:fl
                 end
                 
                 if length(sampNames)<30
-                    text(Y(:,1),Y(:,2),sampNames,'HorizontalAlignment','left');%to insert numbers
+                    h=text(Y(:,1),Y(:,2),sampNames,'HorizontalAlignment','left');%to insert numbers
+                    set(h, 'Interpreter', 'none')
                 else
                     warning('Plot annotation with individuals names disabled because of their big number');
                 end
                 print(strcat(resPath, 'PCoA_individuals_fluxes_', names{1, j}), figForm)
                 title('PCoA of net secretion profiles');
-                
             end
         end
     end
