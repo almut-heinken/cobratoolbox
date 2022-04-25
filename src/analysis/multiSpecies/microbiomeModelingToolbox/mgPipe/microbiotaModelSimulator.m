@@ -168,7 +168,7 @@ else
             endPnt=length(sampNames)-1;
         end
 
-        parfor k=s:s+endPnt
+        for k=s:s+endPnt
             restoreEnvironment(environment);
             changeCobraSolver(solver, 'LP', 0, -1);
 
