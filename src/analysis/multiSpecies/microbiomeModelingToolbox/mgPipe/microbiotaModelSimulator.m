@@ -445,7 +445,7 @@ else
             end
         end
         if ~computeProfiles
-            save([resPath filesep 'presolve.mat'],'presolve')
+            save([resPath filesep 'GrowthRates.mat'],'presolve')
             save([resPath filesep 'infeasModels.mat'],'infeasModels')
         else
             save(strcat(resPath,'intRes.mat'),'netProduction','presolve','infeasModels', 'netUptake')
