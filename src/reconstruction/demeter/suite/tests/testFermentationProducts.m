@@ -44,7 +44,7 @@ if isempty(CBT_LP_SOLVER)
 end
 
 % read fermentation product table
-dataTable = readInputTableForPipeline([inputDataFolder filesep 'FermentationTable.txt']);
+dataTable = readInputTableForPipeline([inputDataFolder filesep 'FermentationTable_tmp.txt']);
 
 % remove the reference columns
 dataTable(:,find(strncmp(dataTable(1,:),'Ref',3))) = [];

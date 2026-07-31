@@ -45,7 +45,7 @@ if isempty(CBT_LP_SOLVER)
 end
 
 % read uptake product tables
-dataTable = readInputTableForPipeline([inputDataFolder filesep 'uptakeTable.txt']);
+dataTable = readInputTableForPipeline([inputDataFolder filesep 'uptakeTable_tmp.txt']);
 
 % remove the reference columns
 dataTable(:,find(strncmp(dataTable(1,:),'Ref',3))) = [];

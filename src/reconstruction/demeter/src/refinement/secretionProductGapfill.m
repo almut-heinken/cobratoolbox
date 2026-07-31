@@ -122,7 +122,7 @@ if ~isempty(additionalSecretionRxns)
 end
 
 % read in the secretion product data
-secretionTable = readInputTableForPipeline([inputDataFolder filesep 'secretionProductTable.txt']);
+secretionTable = readInputTableForPipeline([inputDataFolder filesep 'secretionProductTable_tmp.txt']);
 secretionTable(:,find(strncmp(secretionTable(1,:),'Ref',3)))=[];
 
 secretionGapfillAddConditional = {

@@ -21,18 +21,25 @@ fprintf('Finished refinement and testing of the project %s.\n',reconVersion)
 curationReport={'Feature','Number','Agreement with experimental data'};
 
 %%
-data = table2cell(readtable([testResultsFolder filesep reconVersion '_refined' filesep 'ATP_from_O2_' reconVersion '.txt']));
+% read the first file to get number of tested models
+dInfo = dir([testResultsFolder filesep reconVersion '_refined']);
+files={dInfo.name};
+files=files';
+files(~contains(files(:,1),'.txt'),:)=[];
+data = readInputTableForPipeline([testResultsFolder filesep reconVersion '_refined' filesep files{1}]);
 
 fprintf('%s draft reconstructions have been refined.\n',num2str(size(data,1)))
 
 curationReport(size(curationReport,1)+1,:)={'Refined reconstructions',num2str(size(data,1)),'N/A'};
 %%
-data = table2cell(readtable([testResultsFolder filesep reconVersion '_refined' filesep 'ATP_from_O2_' reconVersion '.txt']));
-
-infeasATP=sum(cell2mat(data(:,2))>tol);
-if infeasATP>0
-    fprintf('%s reconstructions produce infeasible ATP without a substrate.\n',num2str(infeasATP))
-    curationReport(size(curationReport,1)+1,:)={'Reconstructions producing ATP without a substrate',num2str(infeasATP),'N/A'};
+if exist([testResultsFolder filesep reconVersion '_refined' filesep 'ATP_from_O2_' reconVersion '.txt'],'file')==2
+    data = table2cell(readtable([testResultsFolder filesep reconVersion '_refined' filesep 'ATP_from_O2_' reconVersion '.txt']));
+    
+    infeasATP=sum(cell2mat(data(:,2))>tol);
+    if infeasATP>0
+        fprintf('%s reconstructions produce infeasible ATP without a substrate.\n',num2str(infeasATP))
+        curationReport(size(curationReport,1)+1,:)={'Reconstructions producing ATP without a substrate',num2str(infeasATP),'N/A'};
+    end
 end
 %%
 if isfile(([testResultsFolder filesep 'tooHighATP.mat']))

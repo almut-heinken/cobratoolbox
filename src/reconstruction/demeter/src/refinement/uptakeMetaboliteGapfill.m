@@ -119,7 +119,7 @@ if ~isempty(additionalUptakeRxns)
     end
 end
 
-uptakeTable = readInputTableForPipeline([inputDataFolder filesep 'uptakeTable.txt']);
+uptakeTable = readInputTableForPipeline([inputDataFolder filesep 'uptakeTable_tmp.txt']);
 uptakeTable(:,find(strncmp(uptakeTable(1,:),'Ref',3)))=[];
 
 % uptake metabolite list from input table

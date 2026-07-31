@@ -44,7 +44,7 @@ if isempty(CBT_LP_SOLVER)
 end
 
 % read carbon source table
-dataTable = readInputTableForPipeline([inputDataFolder filesep 'CarbonSourcesTable.txt']);
+dataTable = readInputTableForPipeline([inputDataFolder filesep 'CarbonSourcesTable_tmp.txt']);
 
 % remove the reference columns
 dataTable(:,find(strncmp(dataTable(1,:),'Ref',3))) = [];

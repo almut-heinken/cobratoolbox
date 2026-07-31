@@ -44,7 +44,7 @@ if isempty(CBT_LP_SOLVER)
 end
 
 % read secretion product tables
-dataTable = readInputTableForPipeline([inputDataFolder filesep 'secretionProductTable.txt']);
+dataTable = readInputTableForPipeline([inputDataFolder filesep 'secretionProductTable_tmp.txt']);
 
 % remove the reference columns
 dataTable(:,find(strncmp(dataTable(1,:),'Ref',3))) = [];

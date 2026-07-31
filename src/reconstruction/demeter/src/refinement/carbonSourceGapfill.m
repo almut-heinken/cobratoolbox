@@ -32,7 +32,7 @@ function [model, addedRxns, removedRxns] = carbonSourceGapfill(model, microbeID,
 addedRxns={};
 removedRxns={};
 
-carbonSourcesTable = readInputTableForPipeline([inputDataFolder filesep 'CarbonSourcesTable.txt']);
+carbonSourcesTable = readInputTableForPipeline([inputDataFolder filesep 'CarbonSourcesTable_tmp.txt']);
 carbonSourcesTable(:,find(strncmp(carbonSourcesTable(1,:),'Ref',3)))=[];
 
 mInd = find(ismember(carbonSourcesTable(:, 1), microbeID));

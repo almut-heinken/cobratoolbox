@@ -117,13 +117,18 @@ else
 end
 
 %% Start the test suite
-for i =1:steps:length(modelList)
+for i = 1:steps:length(modelList)
     tmpData={};
     if length(modelList)>steps-1 && (length(modelList)-1)>=steps-1
         endPnt=steps-1;
     else
         endPnt=length(modelList)-i;
     end
+    
+    % temporarily save experimental data for this batch to reduce
+    % computation time
+    tmpModels = modelList(i:i+endPnt,1);
+    createInputDataSubset(tmpModels,inputDataFolder)
     
     modelsToLoad={};
     for j=i:i+endPnt
@@ -133,7 +138,6 @@ for i =1:steps:length(modelList)
         end
     end
     parfor j=i:i+endPnt    
-%for j=i:i+endPnt  
         if j <= length(modelList)
             restoreEnvironment(environment);
             changeCobraSolver(solver, 'LP');
@@ -174,11 +178,14 @@ for i =1:steps:length(modelList)
     %% print the results regularly to avoid having to repeat simulations
     % only if there were any findings that need to be reported
     for j=1:length(fields)
-        if size(Results.(fields{j}),2)>1 || any(contains(fields{j},{'TruePositives','FalseNegatives','growsOnDefinedMedium'}))
+        if size(Results.(fields{j}),2)>1
             table2print=cell2table(Results.(fields{j}));
             writetable(table2print,[testResultsFolder filesep fields{j} '_' reconVersion],'FileType','text','WriteVariableNames',false,'Delimiter','tab');
         end
     end
+    
+    % delete the temporary experimental data
+    delete([inputDataFolder filesep 'CarbonSourcesTable_tmp.txt'],[inputDataFolder filesep 'FermentationTable_tmp.txt'],[inputDataFolder filesep 'GrowthRequirementsTable_tmp.txt'],[inputDataFolder filesep 'secretionProductTable_tmp.txt'],[inputDataFolder filesep 'uptakeTable_tmp.txt'])
 end
 
 end

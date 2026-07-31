@@ -64,7 +64,7 @@ end
 
 % Load reaction and metabolite database
 database=loadVMHDatabase;
-try
+
 biomassReaction = model.rxns{strncmp('bio', model.rxns, 3)};
 
 %
@@ -100,10 +100,10 @@ model=changeRxnBounds(model,relaxConstraints,0,'l');
 % * *metsMissingFormulas*: Cell array listing (col 1) all metabolites that do
 % not have metabolite formulas and (col 2) the metabolite names.
 try
-[massImbalancedRxns, chargeImbalancedRxns, ~, metsMissingFormulas] = testModelMassChargeBalance(model, true, biomassReaction);
-testResults.Mass_imbalanced(1, 2:size(massImbalancedRxns,1)) =massImbalancedRxns(2:end,1);
-testResults.Charge_imbalanced(1, 2:size(chargeImbalancedRxns,1))= chargeImbalancedRxns(2:end,1);
-testResults.Mets_without_formulas(1, 2:length(metsMissingFormulas)) = metsMissingFormulas(2:end,1);
+    [massImbalancedRxns, chargeImbalancedRxns, ~, metsMissingFormulas] = testModelMassChargeBalance(model, true, biomassReaction);
+    testResults.Mass_imbalanced(1, 2:size(massImbalancedRxns,1)) =massImbalancedRxns(2:end,1);
+    testResults.Charge_imbalanced(1, 2:size(chargeImbalancedRxns,1))= chargeImbalancedRxns(2:end,1);
+    testResults.Mets_without_formulas(1, 2:length(metsMissingFormulas)) = metsMissingFormulas(2:end,1);
 catch
     warning('Mass and charge balance could not be tested for draft reconstructions!')
 end
@@ -150,7 +150,11 @@ catch
     modelTest = addReaction(modelTest,'DM_atp_c','atp[c] + h2o[c] -> adp[c] + h[c] + pi[c]');
 end
 FBA=optimizeCbModel(modelTest);
-testResults.ATP_from_O2{1, 2} = FBA.f;
+
+% only export result if there is a problem
+if FBA.f > 0.000001
+    testResults.ATP_from_O2{1, 2} = FBA.f;
+end
 
 %% Blocked reactions
 % Computes all reactions in the reconstruction that can never carry flux.
@@ -264,11 +268,10 @@ testResults.Bile_acid_biosynthesis_FalseNegatives(1, 2:length(FalseNegatives)+1)
 % the model but should be secreted according to in vitro data (false
 % negatives).
 
-if exist('drugTable.txt','File')==2
-    [TruePositives, FalseNegatives] = testDrugMetabolism(model, microbeID, biomassReaction, database);
-    testResults.Drug_metabolism_TruePositives(1, 2:length(TruePositives)+1) = TruePositives;
-    testResults.Drug_metabolism_FalseNegatives(1, 2:length(FalseNegatives)+1) = FalseNegatives;
-end
+[TruePositives, FalseNegatives] = testDrugMetabolism(model, microbeID, biomassReaction, database);
+testResults.Drug_metabolism_TruePositives(1, 2:length(TruePositives)+1) = TruePositives;
+testResults.Drug_metabolism_FalseNegatives(1, 2:length(FalseNegatives)+1) = FalseNegatives;
+
 %% Putrefaction pathways
 % Performs an FVA and reports those putrefaction pathway end reactions (exchange reactions)
 % that can carry flux in the model and should carry flux according to
@@ -303,5 +306,4 @@ testResults.PutrefactionPathways_FalseNegatives(1, 2:length(FalseNegatives)+1) =
 [TruePositives, FalseNegatives] = testAromaticAADegradation(model, microbeID, biomassReaction, database);
 testResults.AromaticAminoAcidDegradation_TruePositives(1, 2:length(TruePositives)+1) = TruePositives;
 testResults.AromaticAminoAcidDegradation_FalseNegatives(1, 2:length(FalseNegatives)+1) = FalseNegatives;
-end
 end

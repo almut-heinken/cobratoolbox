@@ -182,6 +182,11 @@ for i=1:steps:length(models)
     draftModelsTmp = {};
     summariesTmp = {};
     
+    % temporarily save experimental data for this batch to reduce
+    % computation time
+    tmpModels = models(i:i+endPnt,1);
+    createInputDataSubset(tmpModels,inputDataFolder)
+    
     parfor j=i:i+endPnt
         restoreEnvironment(environment);
         changeCobraSolver(solver, 'LP', 0, -1);
@@ -226,6 +231,9 @@ for i=1:steps:length(models)
         summaries.(['m_' outputFileNamesTmp{j,1}])=summariesTmp{j};
     end
     save([summaryFolder filesep 'summaries_' reconVersion],'summaries');
+    
+    % delete the temporary experimental data
+    delete([inputDataFolder filesep 'CarbonSourcesTable_tmp.txt'],[inputDataFolder filesep 'FermentationTable_tmp.txt'],[inputDataFolder filesep 'GrowthRequirementsTable_tmp.txt'],[inputDataFolder filesep 'secretionProductTable_tmp.txt'],[inputDataFolder filesep 'uptakeTable_tmp.txt'])
 end
 
 %% Get summary of curation efforts performed

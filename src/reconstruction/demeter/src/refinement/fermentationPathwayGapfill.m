@@ -31,7 +31,7 @@ addedRxns = {};
 removedRxns = {};
 
 % read in the fermentation pathway data
-fermDataTable = readInputTableForPipeline([inputDataFolder filesep 'FermentationTable.txt']);
+fermDataTable = readInputTableForPipeline([inputDataFolder filesep 'FermentationTable_tmp.txt']);
 fermDataTable(:,find(strncmp(fermDataTable(1,:),'Ref',3)))=[];
 
 tol = 1e-8;
