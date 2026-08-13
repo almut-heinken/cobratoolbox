@@ -214,8 +214,7 @@ for i=1:steps:length(models)
             draftModel = translateDraftReconstruction(draftModel);
             draftModelsTmp{j}=draftModel;
         end
-    end
-    % save the data
+    end % save the data
     for j=i:i+endPnt
         model=modelsTmp{j};
         try

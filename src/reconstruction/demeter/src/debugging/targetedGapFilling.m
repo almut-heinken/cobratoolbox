@@ -153,7 +153,7 @@ end
 growthEnablingMets = {};
 
 FBA = optimizeCbModel(model,osenseStr);
-if abs(FBA.f) < tol || FBA.stat==0
+if abs(FBA.obj) < tol || FBA.stat==0
     
     model=modelPrevious;
     

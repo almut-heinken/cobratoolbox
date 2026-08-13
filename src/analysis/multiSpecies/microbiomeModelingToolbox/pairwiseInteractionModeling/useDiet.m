@@ -49,7 +49,7 @@ else
     end      
 end
 
-for i = 1:length(dietConstraints)
+for i = 1:size(dietConstraints,1)
         if  printLevel > 0
             model = changeRxnBounds(model, char(dietConstraints{i, 1}), str2double(dietConstraints{i, 2}), 'l');
         else

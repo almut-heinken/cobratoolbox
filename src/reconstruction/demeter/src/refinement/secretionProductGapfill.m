@@ -131,6 +131,11 @@ secretionGapfillAddConditional = {
     'Trimethylamine', '~any(ismember(model.rxns, {''TMAOR1e'',''TMAOR2e''}))', {'TMAOt2r','TMAt2r','TMAOR1','TMAOR2'}
     };
 
+secretionGapfillNotAdd = {
+    % do not add new reactions if similar ones are present
+    'Biotin','BTNt2','BTNT5r'
+    };
+
 % secretion product list from input table
 % modify names to agree with structure
 % can only contain alphabetic, numeric, or underscore characters and cannot
@@ -159,7 +164,14 @@ if ~isempty(spCols)
     secProds = products(spCols);
     for i = 1:length(secProds)
         % add rxns that are not already in model
-        rxns2Add = setdiff(secretionRxns.(secProds{i}), model.rxns)
+        rxns2Add = setdiff(secretionRxns.(secProds{i}), model.rxns);
+        % not add reactions if similar one is already present
+        if ~isempty(find(strcmp(secretionGapfillNotAdd(:, 1), secProds{i})))
+            notAdd = secretionGapfillNotAdd{find(strcmp(secretionGapfillNotAdd(:, 1), secProds{i})),2};
+            if strcmp(model.rxns,notAdd)
+                rxns2Add = setdiff(rxns2Add,secretionGapfillNotAdd{find(strcmp(secretionGapfillNotAdd(:, 1), secProds{i})),3});
+            end
+        end
         if ~isempty(rxns2Add)
             for j = 1:length(rxns2Add)
                 RxnForm = database.reactions(find(ismember(database.reactions(:, 1), rxns2Add{j})), 3);

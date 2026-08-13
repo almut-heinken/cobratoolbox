@@ -172,7 +172,7 @@ for i=1:size(fpathwayAddConditional,1)
     if any(ismember(fpathways,fpathwayAddConditional{i,1}))
         modelTest=changeRxnBounds(model,fpathwayAddConditional{i,2},0.1,'l');
         FBA=optimizeCbModel(modelTest,'max');
-        if FBA.f < tol || strcmp(FBA.origStat,'INFEASIBLE')
+        if FBA.obj < tol || strcmp(FBA.origStat,'INFEASIBLE')
             if eval(fpathwayAddConditional{i, 3})
                 addRxns = fpathwayAddConditional{i, 4};
                 for j = 1:length(addRxns)
